@@ -87,25 +87,24 @@ export default function UsersPage() {
       <div className="container">
         <div className="section" aria-label="Users">
           {/* Toolbar */}
-          <div className="toolbar" style={{ marginBottom: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="toolbar">
+            <div className="title">
               <h2 style={{ margin: 0 }}>👤 Users</h2>
               <span className="badge">Count: {filtered.length}</span>
             </div>
-            <input
-              className="input"
-              placeholder="Search users by name, username, or email…"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              style={{ minWidth: 260 }}
-            />
+            <div className="search">
+              <input
+                type="text"
+                className="input search"
+                placeholder="Search users by name, username, or email…"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+            </div>
           </div>
 
           {/* Create form */}
-          <form
-            onSubmit={onCreate}
-            style={{ display: 'grid', gap: 10, gridTemplateColumns: '1fr 1fr 1fr auto' }}
-          >
+          <form onSubmit={onCreate} className="form">
             <input
               className="input"
               placeholder="Full name"
@@ -132,33 +131,35 @@ export default function UsersPage() {
           </form>
 
           {/* List */}
-          <table className="table" style={{ marginTop: 14 }}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th style={{ width: 180 }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.name}</td>
-                  <td>{u.username}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-secondary" onClick={() => onEdit(u.id)}>Edit</button>
-                      <button className="btn btn-danger" onClick={() => onDelete(u.id)}>Delete</button>
-                    </div>
-                  </td>
+          <div className="table-wrap">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th style={{ width: 180 }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((u) => (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td>{u.name}</td>
+                    <td>{u.username}</td>
+                    <td>{u.email}</td>
+                    <td>
+                      <div className="actions">
+                        <button className="btn btn-secondary" onClick={() => onEdit(u.id)}>Edit</button>
+                        <button className="btn btn-danger" onClick={() => onDelete(u.id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="footer">
             <span>Note: JSONPlaceholder accepts writes but does not persist. UI updates are optimistic.</span>

@@ -50,7 +50,6 @@ export default function PostsPage() {
     if (!title || !userId) return;
 
     if (editingId) {
-      // UPDATE (optimistic)
       try {
         await fetch(`https://jsonplaceholder.typicode.com/posts/${editingId}`, {
           method: 'PUT',
@@ -69,7 +68,6 @@ export default function PostsPage() {
       return;
     }
 
-    // CREATE (optimistic)
     try {
       await fetch('https://jsonplaceholder.typicode.com/posts', {
         method: 'POST',
@@ -109,25 +107,24 @@ export default function PostsPage() {
       <div className="container">
         <div className="section" aria-label="Posts">
           {/* Toolbar */}
-          <div className="toolbar" style={{ marginBottom: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="toolbar">
+            <div className="title">
               <h2 style={{ margin: 0 }}>📝 Posts</h2>
               <span className="badge">Count: {filtered.length}</span>
             </div>
-            <input
-              className="input"
-              placeholder="Search posts by title…"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              style={{ minWidth: 260 }}
-            />
+            <div className="search">
+              <input
+                type="text"
+                className="input search"
+                placeholder="Search posts by title…"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+              />
+            </div>
           </div>
 
           {/* Create / Edit form */}
-          <form
-            onSubmit={onSubmit}
-            style={{ display: 'grid', gap: 10, gridTemplateColumns: '240px 1fr auto' }}
-          >
+          <form onSubmit={onSubmit} className="form">
             <select
               className="select"
               value={userId}
@@ -155,31 +152,33 @@ export default function PostsPage() {
           </form>
 
           {/* List */}
-          <table className="table" style={{ marginTop: 14 }}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>User</th>
-                <th style={{ width: 180 }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.id}</td>
-                  <td>{p.title}</td>
-                  <td>{p.userId} — {userName(p.userId)}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="btn btn-secondary" onClick={() => startEdit(p)}>Edit</button>
-                      <button className="btn btn-danger" onClick={() => onDelete(p.id)}>Delete</button>
-                    </div>
-                  </td>
+          <div className="table-wrap">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>User</th>
+                  <th style={{ width: 180 }}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.id}</td>
+                    <td>{p.title}</td>
+                    <td>{p.userId} — {userName(p.userId)}</td>
+                    <td>
+                      <div className="actions">
+                        <button className="btn btn-secondary" onClick={() => startEdit(p)}>Edit</button>
+                        <button className="btn btn-danger" onClick={() => onDelete(p.id)}>Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="footer">
             <span>Note: JSONPlaceholder accepts writes but does not persist. UI updates are optimistic.</span>
